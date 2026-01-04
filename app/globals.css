@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "drake";
+  --color-primary: #28e98c;
+  /* Drake Neon Green */
+  --color-secondary: #999999;
+  /* Muted Gray */
+  --color-accent: #28e98c;
+  --color-neutral: #1f1f1f;
+  --color-base-100: #0a0a0a;
+  /* Deepest Black */
+  --color-base-200: #131313;
+  --color-base-300: #1a1a1a;
+  --color-info: #28e98c;
+  --color-success: #28e98c;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-mono);
+  --color-neon: #28e98c;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #131313;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #28e98c;
+  border-radius: 10px;
+}
+
+/* Drake-style Section Label */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #999999;
+  border: 1px solid #333333;
+  padding: 8px 15px;
+  border-radius: 30px;
+  width: fit-content;
+  margin-bottom: 40px;
+}
