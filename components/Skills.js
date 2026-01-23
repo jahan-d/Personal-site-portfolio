@@ -2,16 +2,33 @@
 
 import { motion } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion-variants'
+import {
+    FaReact,
+    FaNodeJs,
+    FaHtml5,
+    FaCss3Alt,
+    FaJsSquare,
+    FaGitAlt,
+    FaTools
+} from 'react-icons/fa'
+import {
+    SiNextdotjs,
+    SiExpress,
+    SiMongodb,
+    SiTailwindcss,
+    SiFirebase
+} from 'react-icons/si'
 
 export default function Skills() {
     const skills = [
-        { name: 'React', percentage: 90 },
-        { name: 'Next.js', percentage: 80 },
-        { name: 'Node.js', percentage: 85 },
-        { name: 'Express', percentage: 85 },
-        { name: 'MongoDB', percentage: 85 },
-        { name: 'Tailwind CSS', percentage: 90 },
-        { name: 'Git', percentage: 80 },
+        { name: 'React', icon: <FaReact />, color: '#61DAFB' },
+        { name: 'Next.js', icon: <SiNextdotjs />, color: '#ffffff' },
+        { name: 'Tailwind', icon: <SiTailwindcss />, color: '#06B6D4' },
+        { name: 'Express', icon: <SiExpress />, color: '#ffffff' },
+        { name: 'MongoDB', icon: <SiMongodb />, color: '#47A248' },
+        { name: 'Node.js', icon: <FaNodeJs />, color: '#339933' },
+        { name: 'Firebase', icon: <SiFirebase />, color: '#FFCA28' },
+        { name: 'Git', icon: <FaGitAlt />, color: '#F05032' },
     ]
 
     return (
@@ -24,34 +41,42 @@ export default function Skills() {
                 className="max-w-3xl"
             >
                 {/* Section Label */}
-                <motion.div variants={fadeUp} className="section-label">
-                    <i className="fa fa-shapes"></i> SKILLS
+                <motion.div variants={fadeUp} className="section-label mb-10">
+                    <FaTools className="text-sm" /> SKILLS
                 </motion.div>
 
                 {/* Headline */}
                 <motion.h2
                     variants={fadeUp}
-                    className="text-4xl md:text-5xl font-black mb-16 leading-tight tracking-tighter text-white uppercase"
+                    className="text-[45px] md:text-[60px] font-light mb-16 leading-[1.1] tracking-tight text-white italic"
                 >
-                    Technical <span className="text-primary">Arsenal</span>
+                    Technical <span className="text-primary font-bold not-italic">Arsenal</span>
                 </motion.h2>
 
                 {/* Skills Grid */}
-                <motion.div variants={fadeUp} className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <motion.div variants={fadeUp} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                     {skills.map((skill, i) => (
-                        <div key={i} className="flex flex-col items-center gap-6 group">
-                            <div className="relative w-full aspect-square rounded-[40px] border-2 border-white/5 group-hover:border-primary transition-all duration-500 flex flex-col items-center justify-center gap-2 overflow-hidden bg-base-200/50">
-                                <span className="text-3xl font-black text-white group-hover:text-primary transition-colors">{skill.percentage}%</span>
+                        <div key={i} className="flex flex-col items-center gap-4 group">
+                            <div className="relative w-full aspect-square rounded-[30px] border border-white/5 flex flex-col items-center justify-center transition-all duration-500 bg-white/[0.02] hover:bg-white/[0.05] overflow-hidden">
+                                {/* Brand Glow (Radial Background) */}
                                 <div
-                                    className="absolute bottom-0 left-0 w-full bg-primary/20 transition-all duration-1000 ease-out h-0 group-hover:h-full opacity-0 group-hover:opacity-100"
-                                    style={{ height: `${skill.percentage}%` }}
+                                    className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+                                    style={{
+                                        background: `radial-gradient(circle at center, ${skill.color} 0%, transparent 70%)`
+                                    }}
                                 />
+
+                                {/* Icon */}
+                                <div className="text-[40px] text-white/20 group-hover:text-white transition-all duration-500 group-hover:scale-110 z-10" style={{ color: skill.color }}>
+                                    {skill.icon}
+                                </div>
                             </div>
-                            <span className="text-xs font-black text-white/50 uppercase tracking-widest">{skill.name}</span>
+                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] group-hover:text-white transition-colors">
+                                {skill.name}
+                            </span>
                         </div>
                     ))}
                 </motion.div>
-
             </motion.div>
         </section>
     )

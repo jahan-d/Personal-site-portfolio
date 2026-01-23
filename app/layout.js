@@ -37,6 +37,10 @@ export const metadata = {
     description: "Building high-performance web experiences with React 19 and Next.js 15.",
     images: ["/images/profile.jpg"],
   },
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -13,7 +13,7 @@ export default function Portfolio() {
             live: 'https://blooddonationappv3.web.app/',
             githubClient: 'https://github.com/jahan-d/blood-donation-app-v3-client',
             githubServer: 'https://github.com/jahan-d/blood-donation-app-v3-server',
-            image: '/images/project-blood.jpg'
+            preview: '/blood-donation.png'
         },
         {
             title: 'Utility Bill System',
@@ -22,7 +22,7 @@ export default function Portfolio() {
             live: 'https://b12a10-v2.web.app/',
             githubClient: 'https://github.com/jahan-d/Utility_Bill_Management_System/tree/main',
             githubServer: 'https://github.com/jahan-d/Utility_Bill_Management_System_server',
-            image: '/images/project-utility.jpg'
+            preview: '/ubms.png'
         },
         {
             title: 'AssetVerse — HR Platform',
@@ -30,7 +30,7 @@ export default function Portfolio() {
             desc: 'Multi-tenant B2B platform for team asset tracking with subscription tiers and automated PDF reporting.',
             live: 'https://assetverse-16573.web.app/',
             github: 'https://github.com/jahan-d/Asset-Verse',
-            image: '/images/project-assetverse.jpg'
+            preview: '/assetverse.png'
         }
     ]
 
@@ -70,7 +70,12 @@ export default function Portfolio() {
                             </div>
 
                             <div className="relative aspect-video rounded-[30px] lg:rounded-[50px] overflow-hidden mb-10 border border-white/5 group-hover:border-primary/50 transition-all duration-700 bg-[#1a1a1a]">
-                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-all z-10" />
+                                <img
+                                    src={project.preview}
+                                    alt={project.title}
+                                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 z-10"
+                                />
+                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-all z-20" />
                                 <div className="w-full h-full flex items-center justify-center text-white/5 text-4xl font-black uppercase tracking-widest select-none">
                                     {project.title.split(' ')[0]}
                                 </div>

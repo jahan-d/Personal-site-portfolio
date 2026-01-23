@@ -5,7 +5,7 @@ import { fadeUp } from '@/lib/motion-variants'
 import Link from 'next/link'
 
 export default function ProjectCard({ project }) {
-    const { title, description, results, tech, liveLink, githubLink, metric } = project
+    const { title, description, results, tech, liveLink, githubLink, metric, image } = project
 
     return (
         <motion.div
@@ -13,15 +13,28 @@ export default function ProjectCard({ project }) {
             whileHover={{ y: -10 }}
             className="card bg-base-300 border border-white/5 shadow-2xl overflow-hidden group"
         >
-            <div className="relative h-48 bg-gradient-to-br from-neutral to-base-100 p-8 flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <h3 className="text-3xl font-black text-white/10 uppercase tracking-tighter group-hover:text-primary transition-colors duration-500">
-                    {title}
-                </h3>
+            <div className="relative h-48 bg-gradient-to-br from-neutral to-base-100 overflow-hidden">
+                {project.image ? (
+                    <>
+                        <img
+                            src={project.image}
+                            alt={title}
+                            className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-base-300/90" />
+                    </>
+                ) : (
+                    <>
+                        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-8 flex items-center justify-center" />
+                        <h3 className="absolute inset-0 flex items-center justify-center text-3xl font-black text-white/10 uppercase tracking-tighter group-hover:text-primary transition-colors duration-500">
+                            {title}
+                        </h3>
+                    </>
+                )}
 
                 {/* Metric Badge */}
                 {metric && (
-                    <div className="absolute top-4 right-4 badge badge-secondary font-black py-3 px-4 shadow-lg shadow-secondary/20">
+                    <div className="absolute top-4 right-4 badge badge-secondary font-black py-3 px-4 shadow-lg shadow-secondary/20 z-10">
                         {metric}
                     </div>
                 )}

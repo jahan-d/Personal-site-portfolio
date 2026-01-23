@@ -4,35 +4,74 @@ import { motion } from 'framer-motion'
 import { fadeUp, staggerContainer } from '@/lib/motion-variants'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import emailjs from 'emailjs-com'
+import emailjs from '@emailjs/browser'
 import { FaEnvelope, FaPaperPlane } from 'react-icons/fa'
 
 export default function Contact() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+    const [formErrors, setFormErrors] = useState({})
+
+    const validateForm = () => {
+        const errors = {}
+        if (!formData.name.trim()) errors.name = 'Full name is required'
+        if (!formData.email.trim()) {
+            errors.email = 'Email is required'
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            errors.email = 'Please enter a valid email address'
+        }
+        if (!formData.message.trim()) {
+            errors.message = 'Message cannot be empty'
+        } else if (formData.message.length < 10) {
+            errors.message = 'Message should be at least 10 characters'
+        }
+        return errors
+    }
 
     const mutation = useMutation({
         mutationFn: async (data) => {
-            // Replace 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', and 'YOUR_PUBLIC_KEY' 
-            // with your actual EmailJS values
+            const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+            const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+            const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+            if (!serviceId || !templateId || !publicKey) {
+                throw new Error('Email service is not configured correctly.')
+            }
+
             return emailjs.send(
-                'service_7xic0rr',
-                'template_nu7fi5o',
+                serviceId,
+                templateId,
                 {
                     from_name: data.name,
                     from_email: data.email,
+                    reply_to: data.email, // Explicitly set for better template control
                     message: data.message,
                 },
-                'Brrb8VAvhH4NhCinp'
+                publicKey
             )
         },
         onSuccess: () => {
             setFormData({ name: '', email: '', message: '' })
+            setFormErrors({})
         }
     })
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        const errors = validateForm()
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors)
+            return
+        }
         mutation.mutate(formData)
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setFormData(prev => ({ ...prev, [name]: value }))
+        // Clear error when user starts typing
+        if (formErrors[name]) {
+            setFormErrors(prev => ({ ...prev, [name]: '' }))
+        }
     }
 
     return (
@@ -70,12 +109,13 @@ export default function Contact() {
                             </label>
                             <input
                                 type="text"
+                                name="name"
                                 placeholder="Your Name"
                                 value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="input bg-transparent border-0 border-b border-white/10 focus:border-primary transition-all rounded-none pl-0 text-white font-medium h-12 w-full focus:outline-none placeholder:text-white/10"
-                                required
+                                onChange={handleInputChange}
+                                className={`input bg-transparent border-0 border-b transition-all rounded-none pl-0 text-white font-medium h-12 w-full focus:outline-none placeholder:text-white/10 ${formErrors.name ? 'border-error' : 'border-white/10 focus:border-primary'}`}
                             />
+                            {formErrors.name && <span className="text-error text-[10px] uppercase font-bold mt-1 tracking-widest">{formErrors.name}</span>}
                         </div>
                         <div className="form-control w-full">
                             <label className="label mb-2">
@@ -83,12 +123,13 @@ export default function Contact() {
                             </label>
                             <input
                                 type="email"
+                                name="email"
                                 placeholder="Your email address"
                                 value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="input bg-transparent border-0 border-b border-white/10 focus:border-primary transition-all rounded-none pl-0 text-white font-medium h-12 w-full focus:outline-none placeholder:text-white/10"
-                                required
+                                onChange={handleInputChange}
+                                className={`input bg-transparent border-0 border-b transition-all rounded-none pl-0 text-white font-medium h-12 w-full focus:outline-none placeholder:text-white/10 ${formErrors.email ? 'border-error' : 'border-white/10 focus:border-primary'}`}
                             />
+                            {formErrors.email && <span className="text-error text-[10px] uppercase font-bold mt-1 tracking-widest">{formErrors.email}</span>}
                         </div>
                     </div>
 
@@ -97,12 +138,13 @@ export default function Contact() {
                             <span className="label-text font-bold uppercase text-[12px] tracking-widest text-white/90">Message <span className="text-primary">*</span></span>
                         </label>
                         <textarea
+                            name="message"
                             placeholder="Write your message here..."
                             value={formData.message}
-                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                            className="textarea bg-transparent border-0 border-b border-white/10 focus:border-primary transition-all rounded-none pl-0 text-white font-medium min-h-[120px] leading-relaxed w-full focus:outline-none placeholder:text-white/10"
-                            required
+                            onChange={handleInputChange}
+                            className={`textarea bg-transparent border-0 border-b transition-all rounded-none pl-0 text-white font-medium min-h-[120px] leading-relaxed w-full focus:outline-none placeholder:text-white/10 ${formErrors.message ? 'border-error' : 'border-white/10 focus:border-primary'}`}
                         ></textarea>
+                        {formErrors.message && <span className="text-error text-[10px] uppercase font-bold mt-1 tracking-widest">{formErrors.message}</span>}
                     </div>
 
                     <div className="pt-4">
@@ -135,7 +177,7 @@ export default function Contact() {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="mt-4 text-error font-bold uppercase text-xs tracking-widest"
                             >
-                                Failed to send message. Please try again or email me directly.
+                                {mutation.error.message || 'Failed to send message. Please try again or email me directly.'}
                             </motion.p>
                         )}
                     </div>
