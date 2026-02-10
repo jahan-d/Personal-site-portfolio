@@ -69,7 +69,7 @@ export default function Intro() {
                 {/* Stats Row */}
                 <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-3 gap-10">
                     <div className="flex flex-col gap-2">
-                        <span className="text-6xl font-black text-primary leading-none">6+</span>
+                        <span className="text-6xl font-black text-primary leading-none">8+</span>
                         <span className="text-xs font-bold text-white/40 uppercase tracking-widest">Months Experience</span>
                     </div>
                     <div className="flex flex-col gap-2">
